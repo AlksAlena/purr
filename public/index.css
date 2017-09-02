@@ -1,0 +1,96 @@
+body {
+	margin: 0;
+	padding: 0;
+	background-color: lightseagreen;
+	padding: 50px;
+	font-size: #333;
+}
+
+.app {
+	background-color: #fff;
+	padding: 50px 30px;
+
+}
+.app h1 {
+	font-size: 34px;
+	text-align: center;
+}
+.app small {
+	display: block;
+	font-size: 26px;
+}
+.column {
+	width: 25%;
+	padding-bottom: 20px;
+	background-color: #999;
+	float: left;
+}
+.column:nth-child(even) {
+	background-color: #ddd;
+}
+.column h2 {
+	text-align: center;
+}
+.area {
+	text-align: center;
+}
+.workArea {
+	background-color: #fff;
+	margin: 0 20px;
+	box-sizing: border-box;
+	height: 150px;
+}
+.task p {
+	border-bottom: 1px solid #ddd;
+}
+.button-create {
+	background-color: #000;
+	color: #fff;
+	width: 100px;
+	height: 50px;
+	margin: 20px 0 0;
+	cursor: pointer;
+	border: none;
+	border-radius: 5px;
+}
+.button-create:active,
+.button-create:hover {
+	background-color: #333;
+}
+.overlay {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(0, 0, 0, 0.3);
+}
+.create-task {
+	position: absolute;
+	background-color: pink;
+	width: 400px;
+	height: 200px;
+	z-index: 2;
+	top: 150px;
+	left: calc(50% - 200px);
+	padding: 20px;
+}
+.overlay.visible,
+.create-task.visible {
+	display: block;
+}
+.new-task {
+	background-color: #fff;
+}
+
+
+
+
+
+
+
+.clearfix::after {
+	content: "";
+	display: table;
+	clear: both;
+}
