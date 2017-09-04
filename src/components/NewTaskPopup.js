@@ -5,6 +5,16 @@ import ButtonCancel from "./ButtonCancel";
 export default class NewTaskPopup extends Component {
 	constructor(props) {
 		super(props);
+		this.msg = this.msg.bind(this);
+		this.addTask = this.addTask.bind(this);
+	}
+
+	msg() {
+		this.props.msg();
+	}
+
+	addTask() {
+		this.props.add();
 	}
 
 	render() {
@@ -18,8 +28,8 @@ export default class NewTaskPopup extends Component {
 						<input type="text" id="task" name="task" />
 						<label for="comment">Enter comment or description</label>
 						<textarea rows="5" id="comment" name="comment"></textarea>
-						<ButtonSave />
-						<ButtonCancel />
+						<ButtonSave msg={this.msg} add={this.addTask} />
+						<ButtonCancel msg={this.msg} />
 					</div>
 
 				</div>
