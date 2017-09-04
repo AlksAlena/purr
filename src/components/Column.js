@@ -1,13 +1,14 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
-import Area from "./Area";
+import TaskList from "./TaskList";
+import Button from "./Button";
 
 export default class Column extends Component {
 	render() {
 		return (
 			<div className="column">
 				<h2>{this.props.title}</h2>
-				<Area tasks={this.props.tasks} />
+				<TaskList tasks={this.props.tasks}/>
+				<Button />
 			</div>
 		);
 	}

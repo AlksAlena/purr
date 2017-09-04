@@ -3,7 +3,8 @@ body {
 	padding: 0;
 	background-color: lightseagreen;
 	padding: 50px;
-	font-size: #333;
+	font-size: 16px;
+	color: #333;
 }
 
 .app {
@@ -24,6 +25,7 @@ body {
 	padding-bottom: 20px;
 	background-color: #999;
 	float: left;
+	text-align: center;
 }
 .column:nth-child(even) {
 	background-color: #ddd;
@@ -31,10 +33,7 @@ body {
 .column h2 {
 	text-align: center;
 }
-.area {
-	text-align: center;
-}
-.workArea {
+.tasks {
 	background-color: #fff;
 	margin: 0 20px;
 	box-sizing: border-box;
@@ -67,22 +66,52 @@ body {
 }
 .create-task {
 	position: absolute;
-	background-color: pink;
+	background-color: #fff;
 	width: 400px;
-	height: 200px;
+	height: 300px;
 	z-index: 2;
 	top: 150px;
 	left: calc(50% - 200px);
 	padding: 20px;
 }
-.overlay.visible,
-.create-task.visible {
-	display: block;
+.task_edit {
+	text-align: center;
 }
-.new-task {
+.task_edit input,
+.task_edit textarea {
+	display: block;
+	width: 90%;
+	margin: 5px auto;
+}
+.task_edit label {
+	display: inline-block;
+	font-weight: bold;
+	margin-top: 10px;
+}
+.create-task input[type="submit"] {
+	background-color: #333;
+	color: #fff;
+	border: none;
+	margin: 5px;
+	padding: 10px 15px;
+	cursor: pointer;
+}
+.create-task input[type="submit"]:hover,
+.create-task input[type="submit"]:active {
+	background-color: gray;
+	color: #000;
+}
+.create-task input[type="submit"]:focus {
+	outline: none;
+}
+.task_edit {
 	background-color: #fff;
 }
-
+.button_cancel,
+.button_save {
+	display: inline-block;
+	margin-bottom: 15px;
+}
 
 
 
