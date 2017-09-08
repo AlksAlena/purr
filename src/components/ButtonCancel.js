@@ -6,7 +6,7 @@ export default class ButtonCancel extends Component {
 		super(props);
 		this.state = { isPress: false };
 		this.handleClick = this.handleClick.bind(this);
-		this.msg = this.msg.bind(this);
+		this.closePopup = this.closePopup.bind(this);
 	}
 
 	handleClick() {
@@ -14,18 +14,15 @@ export default class ButtonCancel extends Component {
 			this.setState({ isPress: false });
 		} else {
 			this.setState({ isPress: true });
+			this.closePopup();
 		}	
 	}
 
-	msg() {
-		this.props.msg();
+	closePopup() {
+		this.props.hidden();
 	}
 
 	render() {
-		if(this.state.isPress) {
-			this.msg();	
-		}
-		
 		return (
 			<div className="button_cancel">
 				<input type="submit" value="Cancel" onClick={this.handleClick} />

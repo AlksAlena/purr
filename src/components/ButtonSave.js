@@ -6,8 +6,8 @@ export default class ButtonSave extends Component {
 		super(props);
 		this.state = { isPress: false };
 		this.handleClick = this.handleClick.bind(this);
-		this.msg = this.msg.bind(this);
 		this.addTask = this.addTask.bind(this);
+		this.closePopup = this.closePopup.bind(this);
 	}
 
 	handleClick() {
@@ -15,23 +15,20 @@ export default class ButtonSave extends Component {
 			this.setState({ isPress: false });
 		} else {
 			this.setState({ isPress: true });
+			this.addTask();
+			this.closePopup();
 		}	
-	}
-
-	msg() {
-		this.props.msg();
 	}
 
 	addTask() {
 		this.props.add();
 	}
 
+	closePopup() {
+		this.props.hidden();
+	}
+
 	render() {
-		if(this.state.isPress) {
-			this.msg();
-			this.addTask();
-		}
-		
 		return (
 			<div className="button_save">
 				<input type="submit" value="Save" onClick={this.handleClick} />

@@ -2,12 +2,8 @@ import React, { Component } from "react";
 import Task from "./Task";
 
 export default class TaskList extends Component {
-	constructor(props) {
-		super(props);
-		this.upTask = this.upTask.bind(this);
-	}
 	
-	upTask() {
+	render() {	
 		let taskList = this.props.tasks.map(function(item, index) {
 			return (
 				<div key={index}>
@@ -16,13 +12,9 @@ export default class TaskList extends Component {
 			);
 		});
 
-		return taskList;
-	}
-
-	render() {		
 		return (
 			<div className="tasks">
-				{this.upTask()}
+				{taskList}
 			</div>
 		);
 	}

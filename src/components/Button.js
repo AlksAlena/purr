@@ -4,9 +4,10 @@ import NewTaskPopup from "./NewTaskPopup";
 export default class Button extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { isPress: false };
+		this.state = { 
+			isPress: false 
+		};
 		this.handleClick = this.handleClick.bind(this);
-		this.msg = this.msg.bind(this);
 		this.addTask = this.addTask.bind(this);
 	}
 
@@ -18,12 +19,9 @@ export default class Button extends Component {
 		}	
 	}
 
-	msg() {
-		this.props.msg();
-	}
-
 	addTask() {
 		this.props.add();
+		this.setState({ isPress: false });
 	}
 
 	render() {
@@ -31,7 +29,7 @@ export default class Button extends Component {
 			return (
 				<div className="button">
 					<input type="submit" className="button-create" value="Add task" onClick={this.handleClick} />
-					<NewTaskPopup msg={this.msg} add={this.addTask} /> 
+					<NewTaskPopup add={this.addTask} /> 
 				</div>
 			);			
 		}
