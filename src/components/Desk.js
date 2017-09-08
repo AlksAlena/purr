@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import Column from "./Column";
 import Popup from "./Popup";
 
-import NTP from "./NTP";
-
 export default class Desk extends Component {
 	render() {
 		return (
