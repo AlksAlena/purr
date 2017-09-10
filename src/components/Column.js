@@ -7,7 +7,7 @@ export default class Column extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			taskList: ["clear floor"]
+			taskList: []
 		};
 		this.addTask = this.addTask.bind(this);
 		this.delTask = this.delTask.bind(this);
@@ -15,8 +15,12 @@ export default class Column extends Component {
 	}
 
 	addTask() {
+		let appStorage = localStorage;
+		let task = JSON.parse(appStorage.getItem("task")); //спарсим его обратно объект
 		let oldTaskList = this.state.taskList;
-		let newTaskList = oldTaskList.concat("new task");
+		// instead string "new task" should be taskObject from localStorage
+		let newTaskList = oldTaskList.concat(task.title);
+		// let newTaskList = oldTaskList.concat("new task");
 		this.setState({ taskList: newTaskList });
 	}
 

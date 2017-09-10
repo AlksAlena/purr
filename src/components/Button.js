@@ -21,7 +21,6 @@ export default class Button extends Component {
 
 	addTask() {
 		this.props.add();
-		this.setState({ isPress: false });
 	}
 
 	render() {
@@ -29,7 +28,7 @@ export default class Button extends Component {
 			return (
 				<div className="button">
 					<input type="submit" className="button-create" value="Add task" onClick={this.handleClick} />
-					<NewTaskPopup add={this.addTask} /> 
+					<NewTaskPopup add={this.addTask} button={this} /> 
 				</div>
 			);			
 		}
