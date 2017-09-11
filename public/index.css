@@ -2,124 +2,146 @@ body {
 	margin: 0;
 	padding: 0;
 	background-color: lightseagreen;
-	padding: 50px;
-	font-size: 16px;
 	color: #333;
+	position: relative;
 }
-
 .app {
 	background-color: #fff;
-	padding: 50px 30px;
-
+	padding-bottom: 60px;
 }
 .app h1 {
-	font-size: 34px;
+	font-size: 28px;
 	text-align: center;
+	margin-bottom: 30px;
 }
 .app small {
 	display: block;
-	font-size: 26px;
+	font-size: 22px;
 }
 .column {
-	width: 25%;
-	padding-bottom: 20px;
 	background-color: #999;
-	float: left;
 	text-align: center;
+	margin-bottom: 10px;
 }
 .column:nth-child(even) {
 	background-color: #ddd;
 }
 .column h2 {
 	text-align: center;
+	font-size: 24px;
+	margin: 15px 0;
+}
+.column .btn {
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: none;
+	padding: 5px 7px;
+	border-radius: 5px 0 0 5px;
+	background-color: #222;
+	color: #fff;
+}
+.btn:active,
+.btn:hover {
+	background-color: #444;
 }
 .tasks {
 	background-color: #fff;
-	margin: 0 20px;
+	width: 100%;
+	height: 350px;
 	box-sizing: border-box;
-	height: 150px;
+	overflow-y: scroll;
 }
 .task p {
-	border-bottom: 1px solid #ddd;
+	border-bottom: 1px solid #999;
+	font-size: 18px;
+	padding: 8px 0;
+	margin: 0;
 }
-.button-create {
-	background-color: #000;
-	color: #fff;
-	width: 100px;
-	height: 50px;
-	margin: 20px 0 0;
+.task:hover {
+	background-color: pink;
+	border-color: transparent;
 	cursor: pointer;
+}
+.btn-add {
+	background-color: #222;
+	color: #fff;
 	border: none;
 	border-radius: 5px;
+	font-size: 18px;
+	padding: 8px 20px;
+	margin: 15px 0;
 }
-.button-create:active,
-.button-create:hover {
-	background-color: #333;
+.btn-add:active,
+.btn-add:hover {
+	background-color: #444;
 }
 .overlay {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	bottom: 0;
 	left: 0;
 	right: 0;
 	background-color: rgba(0, 0, 0, 0.3);
+	z-index: 1;
 }
-.create-task {
-	position: absolute;
+.content {
+	position: fixed;
 	background-color: #fff;
 	width: 400px;
-	height: 300px;
 	z-index: 2;
-	top: 150px;
+	top: 0;
+	/*top: 80px;*/
 	left: calc(50% - 200px);
-	padding: 20px;
-}
-.task_edit {
+	padding: 10px;
 	text-align: center;
 }
-.task_edit input,
-.task_edit textarea {
+.content h3 {
+	margin: 10px 0;
+}
+.content input,
+.content textarea,
+.content .btn-cancel {
 	display: block;
 	width: 90%;
 	margin: 5px auto;
 }
-.task_edit label {
+.content label {
 	display: inline-block;
-	font-weight: bold;
 	margin-top: 10px;
+	float: left;
+	margin-left: 20px;
 }
-.create-task input[type="submit"] {
+.content input[type="text"],
+.content textarea {
+	padding: 5px;
+}
+.content input[type="submit"],
+.content input[type="button"] {
+	display: inline-block;
+	width: 25%;
 	background-color: #333;
 	color: #fff;
 	border: none;
-	margin: 5px;
-	padding: 10px 15px;
+	padding: 6px 15px;
 	cursor: pointer;
 }
-.create-task input[type="submit"]:hover,
-.create-task input[type="submit"]:active {
+.content input[type="button"] {
+	margin-left: 10px;
+}
+.content input[type="submit"]:hover,
+.content input[type="submit"]:active,
+.content input[type="button"]:hover,
+.content input[type="button"]:active {
 	background-color: gray;
 	color: #000;
 }
-.create-task input[type="submit"]:focus {
+.content input[type="submit"]:focus,
+.content input[type="button"]:focus {
 	outline: none;
 }
-.task_edit {
-	background-color: #fff;
-}
-.button_cancel,
-.button_save {
-	display: inline-block;
-	margin-bottom: 15px;
-}
 
 
-
-
-
-
-.clearfix::after {
-	content: "";
-	display: table;
-	clear: both;
+.hidden {
+	display: none;
 }
