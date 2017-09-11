@@ -1,14 +1,15 @@
 import React, { Component } from "react";
-import NewTaskPopup from "./NewTaskPopup";
 
-export default class EditTaskPopup extends NewTaskPopup {
+export default class EditTaskPopup extends Component {
 	constructor(props) {
 		super(props);
 	}
 
 	render() {
 		return (
-			<div></div>
+			<div className={this.state.className}>
+				alert("EditTaskPopup")
+			</div>
 		);
 	}
 }

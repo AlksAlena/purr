@@ -1,32 +1,37 @@
 import React, { Component } from "react";
-import ButtonSave from "./ButtonSave";
-import ButtonCancel from "./ButtonCancel";
 
 export default class NewTaskPopup extends Component {
 	constructor(props) {
 		super(props);
 		this.addTask = this.addTask.bind(this);
 		this.closePopup = this.closePopup.bind(this);
-		this.handleInput = this.handleInput.bind(this);
+		this.handleChangeTitle = this.handleChangeTitle.bind(this);
+		this.handleChangeDescr = this.handleChangeDescr.bind(this);
+		this.handleChangeComment = this.handleChangeComment.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 		this.state = {
-			className: "newTaskPopup"
+			className: "newTaskPopup",
+			taskTitle: "",
+			taskDescr: "",
+			taskComment: ""
 		};
 	}
 
-	addTask() {
-		// сначала сохранить ввод пользователя, потом 
-		// вызвать родительскую addTask()
-		/*
+	addTask() {// save custom input as new task
+		let appStorage = localStorage;
+
 		let obj = {
-		title: "Tomorrow",
-		descr: "Buy oreo cookies",
+		title: this.state.taskTitle,
+		descr: this.state.taskDescr,
+		comment: this.state.taskComment,
 		author: appStorage.getItem("author")
 		};
 		console.log(obj);
-		// сериализация объекта и его добавление в хранилище
+		
+		// serialize object and upload in localStorage
 		var newTaskSerial = JSON.stringify(obj);
 		appStorage.setItem("task", newTaskSerial);
-		*/
+
 		this.props.add();
 	}
 
@@ -44,27 +49,40 @@ export default class NewTaskPopup extends Component {
 		button.setState({ isPress: false});
 	}
 
-	handleInput(event) {
-		console.log(event.target.value);
+	handleChangeTitle(event) {
+		this.setState({taskTitle: event.target.value});
+	}
+
+	handleChangeDescr(event) {
+		this.setState({taskDescr: event.target.value});
+	}
+
+	handleChangeComment(event) {
+		this.setState({taskComment: event.target.value});
+	}
+
+	handleSubmit(event) {
+		this.addTask();
+		this.closePopup();
+		event.preventDefault();
 	}
 
 	render() {
 		return (
 			<div className={this.state.className}>
 				<div className="overlay"></div>
-				<div className="create-task">
-					<div className="task_edit">
+				<div className="content">
+					<form onSubmit={this.handleSubmit}>
 						<h3>Create new task</h3>
-						<label for="task">Enter title of task</label>
-						<input type="text" id="task" name="task" onInput={this.handleInput} />
+						<label for="taskTitle">Enter title of task</label>
+						<input type="text" id="taskTitle" name="taskTitle" value={this.state.taskTitle} onChange={this.handleChangeTitle} required />
 						<label for="descr">Enter description</label>
-						<textarea rows="3" id="describe" name="describe" onInput={this.handleInput}></textarea>
+						<textarea rows="3" id="describe" name="describe" value={this.state.taskDescr} onChange={this.handleChangeDescr} ></textarea>
 						<label for="comment">Enter comment</label>
-						<textarea rows="3" id="comment" name="comment" onInput={this.handleInput}></textarea>
-						<ButtonSave add={this.addTask} hidden={this.closePopup}/>
-						<ButtonCancel hidden={this.closePopup} />
-					</div>
-
+						<textarea rows="3" id="comment" name="comment" value={this.state.taskComment} onChange={this.handleChangeComment} ></textarea>
+						<input type="submit" value="Save" />
+						<input type="button" value="Cancel" onClick={this.closePopup} />
+					</form>
 				</div>
 			</div>
 		);

@@ -27,16 +27,16 @@ export default class Button extends Component {
 		if(this.state.isPress) {
 			return (
 				<div className="button">
-					<input type="submit" className="button-create" value="Add task" onClick={this.handleClick} />
+					<input type="submit" className="btn-add" value="Add task" onClick={this.handleClick} />
 					<NewTaskPopup add={this.addTask} button={this} /> 
 				</div>
 			);			
+		} else {
+			return (
+				<div className="button">
+					<input type="submit" className="btn-add" value="Add task" onClick={this.handleClick} />
+				</div>
+			);
 		}
-		
-		return (
-			<div className="button">
-				<input type="submit" className="button-create" value="Add task" onClick={this.handleClick} />
-			</div>
-		);
 	}
 }

@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 
-export default class NewUserPopup  extends Component {
+export default class ColumnNewTitlePopup  extends Component {
 	constructor(props) {
 		super(props);
 		this.closePopup = this.closePopup.bind(this);
+		this.editColumnTitle = this.editColumnTitle.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
-		this.state = { 
-			author: "",
-			className: "newUserPopup"
-		};
+		this.state = {
+			className: "columnNewTitle",
+			title: ""
+		}
 	}
 
 	closePopup() {
@@ -23,13 +24,22 @@ export default class NewUserPopup  extends Component {
 	}
 
 	handleChange(event) {
-		this.setState({author: event.target.value});
+		this.setState({title: event.target.value});
 	}
 
 	handleSubmit(event) {
-		localStorage.setItem("author", this.state.author);
+		this.editColumnTitle();
 		this.closePopup();
 		event.preventDefault();
+	}
+
+	editColumnTitle() {
+		if(this.state.title) {
+			localStorage.setItem("columnNewTitle", this.state.title);
+		} else {
+			localStorage.setItem("columnNewTitle", this.props.title);
+		}		
+		this.props.editTitle();
 	}
 
 	render() {
@@ -38,9 +48,10 @@ export default class NewUserPopup  extends Component {
 				<div className="overlay"></div>
 				<div className="content">
 					<form onSubmit={this.handleSubmit} >
-						<h3>What is your name?</h3>
-						<input type="text" name="userName" value={this.state.author} onChange={this.handleChange} />
+						<h3>Edit title</h3>
+						<input type="text" value={this.state.title} onChange={this.handleChange} />
 						<input type="submit" value="Save" />
+						<input type="button" value="Cancel" onClick={this.closePopup} />
 					</form>
 				</div>
 			</div>
