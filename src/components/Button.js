@@ -20,23 +20,17 @@ export default class Button extends Component {
 	}
 
 	addTask() {
-		this.props.add();
+		this.props.column.addTask();
 	}
 
 	render() {
-		if(this.state.isPress) {
-			return (
-				<div className="button">
-					<input type="submit" className="btn-add" value="Add task" onClick={this.handleClick} />
-					<NewTaskPopup add={this.addTask} button={this} /> 
-				</div>
-			);			
-		} else {
-			return (
-				<div className="button">
-					<input type="submit" className="btn-add" value="Add task" onClick={this.handleClick} />
-				</div>
-			);
-		}
+		return (
+			<div className="button">
+				<input type="submit" className="btn-add" value="Add task" onClick={this.handleClick} />
+				{ this.state.isPress ? 
+					<NewTaskPopup add={this.addTask} button={this} colTitle={this.props.column.state.title}/> : ""
+				}					 
+			</div>
+		);	
 	}
 }

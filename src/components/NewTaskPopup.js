@@ -5,9 +5,10 @@ export default class NewTaskPopup extends Component {
 		super(props);
 		this.addTask = this.addTask.bind(this);
 		this.closePopup = this.closePopup.bind(this);
-		this.handleChangeTitle = this.handleChangeTitle.bind(this);
-		this.handleChangeDescr = this.handleChangeDescr.bind(this);
-		this.handleChangeComment = this.handleChangeComment.bind(this);
+		this.escClosePopup = this.escClosePopup.bind(this);
+		this.handleSetTitle = this.handleSetTitle.bind(this);
+		this.handleSetDescr = this.handleSetDescr.bind(this);
+		this.handleSetComment = this.handleSetComment.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.state = {
 			className: "newTaskPopup",
@@ -17,22 +18,12 @@ export default class NewTaskPopup extends Component {
 		};
 	}
 
-	addTask() {// save custom input as new task
-		let appStorage = localStorage;
+	componentDidMount() {
+		document.body.addEventListener("keydown", this.escClosePopup);
+	}
 
-		let obj = {
-		title: this.state.taskTitle,
-		descr: this.state.taskDescr,
-		comment: this.state.taskComment,
-		author: appStorage.getItem("author")
-		};
-		console.log(obj);
-		
-		// serialize object and upload in localStorage
-		var newTaskSerial = JSON.stringify(obj);
-		appStorage.setItem("task", newTaskSerial);
-
-		this.props.add();
+	componentWillUnmount() {
+		document.body.removeEventListener("keydown", this.escClosePopup);
 	}
 
 	closePopup() {
@@ -43,21 +34,46 @@ export default class NewTaskPopup extends Component {
 		let needClass = [oldClass, "hidden"];
 		let newClass = needClass.join(" ");
 		this.setState({ className: newClass });
-		// button causing the NewTaskPopup
+		// button causing the popup
 		// after closePopup() state of button should be false
 		let button = this.props.button;
 		button.setState({ isPress: false});
 	}
 
-	handleChangeTitle(event) {
+	escClosePopup() { // press Escape key
+		if (event.keyCode == 27) {
+			this.closePopup();
+		}
+	}
+
+	addTask() {// save custom input as new task
+		let appStorage = localStorage;
+
+		let obj = {
+			title: this.state.taskTitle,
+			descr: this.state.taskDescr ? this.state.taskDescr : "-",
+			comment: this.state.taskComment ? this.state.taskComment : "-",
+			author: appStorage.getItem("author"),
+			column: this.props.colTitle
+		};
+		console.log(obj);
+		
+		// serialize object and upload in localStorage
+		var newTaskSerial = JSON.stringify(obj);
+		appStorage.setItem("task", newTaskSerial);
+
+		this.props.add();
+	}
+
+	handleSetTitle(event) {
 		this.setState({taskTitle: event.target.value});
 	}
 
-	handleChangeDescr(event) {
+	handleSetDescr(event) {
 		this.setState({taskDescr: event.target.value});
 	}
 
-	handleChangeComment(event) {
+	handleSetComment(event) {
 		this.setState({taskComment: event.target.value});
 	}
 
@@ -75,11 +91,11 @@ export default class NewTaskPopup extends Component {
 					<form onSubmit={this.handleSubmit}>
 						<h3>Create new task</h3>
 						<label for="taskTitle">Enter title of task</label>
-						<input type="text" id="taskTitle" name="taskTitle" value={this.state.taskTitle} onChange={this.handleChangeTitle} required />
+						<input type="text" value={this.state.taskTitle} onChange={this.handleSetTitle} autoFocus={true} required />
 						<label for="descr">Enter description</label>
-						<textarea rows="3" id="describe" name="describe" value={this.state.taskDescr} onChange={this.handleChangeDescr} ></textarea>
+						<textarea rows="3" value={this.state.taskDescr} onChange={this.handleSetDescr} ></textarea>
 						<label for="comment">Enter comment</label>
-						<textarea rows="3" id="comment" name="comment" value={this.state.taskComment} onChange={this.handleChangeComment} ></textarea>
+						<textarea rows="3" value={this.state.taskComment} onChange={this.handleSetComment} ></textarea>
 						<input type="submit" value="Save" />
 						<input type="button" value="Cancel" onClick={this.closePopup} />
 					</form>

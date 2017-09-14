@@ -27,7 +27,10 @@ export default class NewUserPopup  extends Component {
 	}
 
 	handleSubmit(event) {
-		localStorage.setItem("author", this.state.author);
+		// save value in local storage
+		localStorage.setItem("author", this.state.author );
+		// set state in App component
+		this.props.app.setState({ author: this.state.author });
 		this.closePopup();
 		event.preventDefault();
 	}
@@ -39,7 +42,7 @@ export default class NewUserPopup  extends Component {
 				<div className="content">
 					<form onSubmit={this.handleSubmit} >
 						<h3>What is your name?</h3>
-						<input type="text" name="userName" value={this.state.author} onChange={this.handleChange} />
+						<input type="text" name="userName" value={this.state.author} onChange={this.handleChange} autoFocus={true} required />
 						<input type="submit" value="Save" />
 					</form>
 				</div>
