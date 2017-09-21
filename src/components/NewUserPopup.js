@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types"; 
 
 export default class NewUserPopup  extends Component {
 	constructor(props) {
@@ -41,7 +42,11 @@ export default class NewUserPopup  extends Component {
 				<div className="overlay"></div>
 				<div className="content">
 					<form onSubmit={this.handleSubmit} >
-						<h3>What is your name?</h3>
+						<a href="#" className="btn__close" title="close" onClick={this.closePopup}>
+							<i className="icon-cancel"></i>
+						</a>
+
+						<h2>What is your name?</h2>
 						<input type="text" name="userName" value={this.state.author} onChange={this.handleChange} autoFocus={true} required />
 						<input type="submit" value="Save" />
 					</form>
@@ -50,3 +55,7 @@ export default class NewUserPopup  extends Component {
 		);
 	}
 }
+
+NewUserPopup.propTypes = {
+	app: PropTypes.object,
+};

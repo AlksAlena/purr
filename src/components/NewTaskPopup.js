@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types"; 
 
 export default class NewTaskPopup extends Component {
 	constructor(props) {
@@ -8,13 +9,11 @@ export default class NewTaskPopup extends Component {
 		this.escClosePopup = this.escClosePopup.bind(this);
 		this.handleSetTitle = this.handleSetTitle.bind(this);
 		this.handleSetDescr = this.handleSetDescr.bind(this);
-		this.handleSetComment = this.handleSetComment.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.state = {
 			className: "newTaskPopup",
 			taskTitle: "",
-			taskDescr: "",
-			taskComment: ""
+			taskDescr: ""
 		};
 	}
 
@@ -52,7 +51,7 @@ export default class NewTaskPopup extends Component {
 		let obj = {
 			title: this.state.taskTitle,
 			descr: this.state.taskDescr ? this.state.taskDescr : "-",
-			comment: this.state.taskComment ? this.state.taskComment : "-",
+			comment: [],
 			author: appStorage.getItem("author"),
 			column: this.props.colTitle
 		};
@@ -73,10 +72,6 @@ export default class NewTaskPopup extends Component {
 		this.setState({taskDescr: event.target.value});
 	}
 
-	handleSetComment(event) {
-		this.setState({taskComment: event.target.value});
-	}
-
 	handleSubmit(event) {
 		this.addTask();
 		this.closePopup();
@@ -89,18 +84,25 @@ export default class NewTaskPopup extends Component {
 				<div className="overlay"></div>
 				<div className="content">
 					<form onSubmit={this.handleSubmit}>
-						<h3>Create new task</h3>
+						<a href="#" className="btn__close" title="close" onClick={this.closePopup}>
+							<i className="icon-cancel"></i>
+						</a>
+
+						<h2>Create a new task</h2>
 						<label for="taskTitle">Enter title of task</label>
 						<input type="text" value={this.state.taskTitle} onChange={this.handleSetTitle} autoFocus={true} required />
 						<label for="descr">Enter description</label>
 						<textarea rows="3" value={this.state.taskDescr} onChange={this.handleSetDescr} ></textarea>
-						<label for="comment">Enter comment</label>
-						<textarea rows="3" value={this.state.taskComment} onChange={this.handleSetComment} ></textarea>
 						<input type="submit" value="Save" />
-						<input type="button" value="Cancel" onClick={this.closePopup} />
 					</form>
 				</div>
 			</div>
 		);
 	}
 }
+
+NewTaskPopup.propTypes = {
+	add: PropTypes.func,
+	button: PropTypes.object,
+	colTitle: PropTypes.string,
+};

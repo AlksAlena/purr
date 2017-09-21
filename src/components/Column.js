@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types"; 
 import TaskList from "./TaskList";
 import Button from "./Button";
 import ColumnNewTitlePopup from "./ColumnNewTitlePopup";
@@ -119,14 +120,19 @@ export default class Column extends Component {
 	render() {
 		return (
 			<div className="col-sm-6 col-md-3 column">
-				<h2>{this.state.title}<i className="icon-pencil" onClick={this.handleClick}></i></h2>
+				<h2 className="column-title">{this.state.title}
+					<i className="icon-pencil" title="edit title" onClick={this.handleClick}></i>
+				</h2>
 				<TaskList tasks={this.state.taskList} column={this} />
 				<Button column={this} />
 				{ this.state.isChangeTitle ?
-					<ColumnNewTitlePopup parent={this} /> :
-					""
+					<ColumnNewTitlePopup parent={this} /> : ""
 				}
 			</div>
 		);
 	}
 }
+
+Column.propTypes = {
+	title: PropTypes.string,
+};

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types"; 
 import DetailTaskPopup from "./DetailTaskPopup";
 
 export default class Task extends Component {
@@ -41,7 +42,9 @@ export default class Task extends Component {
 			return (
 				<div>
 					<div className="task" style={divStyle} onClick={this.handleClick} >
-						<p>{this.props.task.title}</p>
+						<p className="task-title">{this.props.task.title}
+							<i className="icon-comment-empty" title="comments">{this.props.task.comment.length}</i>
+						</p>
 					</div>
 					<DetailTaskPopup task={this.props.task} parent={this} currentColumnTitle={this.props.currentColumnTitle}/>
 				</div>
@@ -49,10 +52,21 @@ export default class Task extends Component {
 		} else {
 			return (
 				<div className="task" onClick={this.handleClick} >
-					<p>{this.props.task.title}</p>
+					<p className="task-title">{this.props.task.title}
+						<i className="icon-comment-empty" title="comments">{this.props.task.comment.length}</i>
+					</p>
 				</div>
 			);
 		}
 		
 	}
 }
+
+Task.propTypes = {
+	task: PropTypes.object,
+	index: PropTypes.number,
+	del: PropTypes.func,
+	upd: PropTypes.func,
+	initColumnTitle: PropTypes.string, 
+	currentColumnTitle: PropTypes.string,
+};

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types"; 
 import NewTaskPopup from "./NewTaskPopup";
 
 export default class Button extends Component {
@@ -25,8 +26,8 @@ export default class Button extends Component {
 
 	render() {
 		return (
-			<div className="button">
-				<input type="submit" className="btn-add" value="Add task" onClick={this.handleClick} />
+			<div className="column-button__add">
+				<i className="icon-doc-add" title="add task" onClick={this.handleClick} ></i>
 				{ this.state.isPress ? 
 					<NewTaskPopup add={this.addTask} button={this} colTitle={this.props.column.state.title}/> : ""
 				}					 
@@ -34,3 +35,7 @@ export default class Button extends Component {
 		);	
 	}
 }
+
+Button.propTypes = {
+	column: PropTypes.object,
+};

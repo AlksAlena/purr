@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types"; 
 
 export default class ColumnNewTitlePopup  extends Component {
 	constructor(props) {
@@ -11,7 +12,7 @@ export default class ColumnNewTitlePopup  extends Component {
 		this.state = {
 			className: "columnNewTitle",
 			title: ""
-		}
+		};
 	}
 
 	componentDidMount() {
@@ -69,13 +70,21 @@ export default class ColumnNewTitlePopup  extends Component {
 				<div className="overlay"></div>
 				<div className="content">
 					<form onSubmit={this.handleSubmit} >
-						<h3>Edit title</h3>
+						<a href="#" className="btn__close" title="close" onClick={this.closePopup}>
+							<i className="icon-cancel"></i>
+						</a>
+
+						<h2>Edit title</h2>
+						<label>Enter new title of the task</label>
 						<input type="text" value={this.state.title} onChange={this.handleChange} autoFocus={true} />
 						<input type="submit" value="Save" />
-						<input type="button" value="Cancel" onClick={this.closePopup} />
 					</form>
 				</div>
 			</div>
 		);
 	}
 }
+
+ColumnNewTitlePopup.propTypes = {
+	parent: PropTypes.object,
+};
