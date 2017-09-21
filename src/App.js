@@ -8,13 +8,12 @@ export default class App extends Component {
 		this.downloadAuthor = this.downloadAuthor.bind(this);
 		this.state = {
 			author: ""
-		}
+		};
 	}
 
 	downloadAuthor() {
 		let authorLS = localStorage.getItem("author");
-		(authorLS ? this.setState({ author: authorLS }): "");
-		
+		(authorLS ? this.setState({ author: authorLS }): "");		
 	}
 
 	componentWillMount() {
@@ -24,14 +23,12 @@ export default class App extends Component {
 	render() {		
 		return (
 			<div className="container app">
-				<div className="app-header">
-					{ this.state.author ? 
-						<h1>Hi, {this.state.author}</h1> : 
-						<h1>Frello - powerful app for managing your tasks
+				{ this.state.author ? 
+					<h1 className="app-title">Hi, {this.state.author}</h1> : 
+					<h1 className="app-title">Frello - powerful app for managing your tasks
 						<small>Get's started it's FREE!</small>
-						</h1>
-					}
-				</div>
+					</h1>
+				}
 				<Desk />
 				{ this.state.author ? "" : <NewUserPopup app={this} /> }
 			</div>
