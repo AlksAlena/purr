@@ -2,6 +2,8 @@
 
 Training analogue Trello.com on React without Redux.
 
+![screenshot of the app](purrproject.JPG "Common view")
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
@@ -31,8 +33,6 @@ Further running local server and open this project on your localhost :
 $ npm run server
 ```
 ## Deployment
-
-![screenshot of the app](purrproject.JPG "Common view")
 
 ## Built With
 
