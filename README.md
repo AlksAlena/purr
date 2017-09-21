@@ -8,23 +8,23 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-You need to install the npm (https://nodejs.org/en/download/)
+You need to install the [npm](https://nodejs.org/en/download/)
 
 ### Installing
 
 You need to run npm and to install all required packages from package.json
 
 ```
-npm i
+$ npm i
 ```
 
 ## Running the tests
 
 ```
-npm run start
+$ npm run start
 ```
 ```
-npm run server
+$ npm run server
 ```
 ## Deployment
 
