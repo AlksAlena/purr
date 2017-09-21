@@ -1,6 +1,6 @@
 # Purr-project
 
-Training analogue Trello.com on React without Redux
+Training analogue Trello.com on React without Redux.
 
 ## Getting Started
 
@@ -8,11 +8,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-You need to install the [npm](https://nodejs.org/en/download/)
+You need to install the [npm](https://nodejs.org/en/download/).
 
 ### Installing
 
-You need to run npm and to install all required packages from package.json
+You need to run npm and to install all required packages from *package.json* .
 
 ```
 $ npm i
@@ -20,13 +20,19 @@ $ npm i
 
 ## Running the tests
 
+First create *bundle.js* :
+
 ```
 $ npm run start
 ```
+Further running local server and open this project on your localhost :
+
 ```
 $ npm run server
 ```
 ## Deployment
+
+![screenshot of the app](purrproject.JPG "Common view")
 
 ## Built With
 
@@ -40,3 +46,7 @@ $ npm run server
 
 This project is licensed under the MIT License - see the [LICENSE](https://en.wikipedia.org/wiki/MIT_License) for details
 
+## Acknowledgments
+
+* **Billie Thompson** - *good template README.md* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Mandi Grant** - *Add a screenshot to your Github repo README.md* - [article](http://www.tilcode.com/add-a-screenshot-to-your-github-repo-readme-md/) [MJGrant](https://github.com/MJGrant) 
