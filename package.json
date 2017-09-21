@@ -1,7 +1,7 @@
 {
   "name": "frello_app",
   "version": "1.0.0",
-  "description": "First project with React",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "webpack --config webpack.config.js",
@@ -24,5 +24,7 @@
     "webpack": "^3.5.5",
     "webpack-dev-server": "^2.7.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "prop-types": "^15.5.10"
+  }
 }
