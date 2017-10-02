@@ -35,24 +35,24 @@ export default class Column extends Component {
 
 	deleteTask() {
 		let nameColumn = this.props.title;
-		let delIndex = localStorage.getItem(`delIndex${nameColumn}`);
+		let deleteIndex = localStorage.getItem(`deleteIndex${nameColumn}`);
 		let tmpTaskList = this.state.taskList;
-		tmpTaskList.splice(delIndex, 1);
+		tmpTaskList.splice(deleteIndex, 1);
 		this.setState({ taskList: tmpTaskList });
-		localStorage.removeItem(`delIndex${nameColumn}`);
+		localStorage.removeItem(`deleteIndex${nameColumn}`);
 		var tmpTaskListSerial = JSON.stringify(tmpTaskList);
 		localStorage.setItem(`taskList${nameColumn}`, tmpTaskListSerial);
 	}
 
 	updateTask() {
 		let nameColumn = this.props.title;
-		let updIndex = localStorage.getItem(`updIndex${nameColumn}`);
-		let updTask = JSON.parse(localStorage.getItem("updTask"));
+		let updateIndex = localStorage.getItem(`updateIndex${nameColumn}`);
+		let updateTask = JSON.parse(localStorage.getItem("updateTask"));
 		let tmpTaskList = this.state.taskList;
-		tmpTaskList.splice(updIndex, 1, updTask);
+		tmpTaskList.splice(updateIndex, 1, updateTask);
 		this.setState({ taskList: tmpTaskList });
-		localStorage.removeItem(`updIndex${nameColumn}`);
-		localStorage.removeItem("updTask");
+		localStorage.removeItem(`updateIndex${nameColumn}`);
+		localStorage.removeItem("updateTask");
 		var tmpTaskListSerial = JSON.stringify(tmpTaskList);
 		localStorage.setItem(`taskList${nameColumn}`, tmpTaskListSerial);
 	}
