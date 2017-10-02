@@ -71,8 +71,8 @@ export default class DetailTaskPopup extends Component {
 				author: localStorage.getItem("author"), //not author of the task
 				date: now
 			};
-			let oldCommentList = this.state.commentList;
-			let newCommentList = oldCommentList.concat(comment);
+			let newCommentList = this.state.commentList;
+			newCommentList.unshift(comment);
 			this.setState({ commentList: newCommentList });
 			this.setState({ taskComment: "" });
 			this.setState({ isEdited: true });
