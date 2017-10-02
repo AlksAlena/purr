@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types"; 
+import classNames from "classnames";
 
 export default class NewTaskPopup extends Component {
 	constructor(props) {
 		super(props);
 		this.addTask = this.addTask.bind(this);
 		this.closePopup = this.closePopup.bind(this);
-		this.escClosePopup = this.escClosePopup.bind(this);
+		this.handleButtonEscape = this.handleButtonEscape.bind(this);
 		this.handleSetTitle = this.handleSetTitle.bind(this);
 		this.handleSetDescr = this.handleSetDescr.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,50 +19,36 @@ export default class NewTaskPopup extends Component {
 	}
 
 	componentDidMount() {
-		document.body.addEventListener("keydown", this.escClosePopup);
+		document.body.addEventListener("keydown", this.handleButtonEscape);
 	}
 
 	componentWillUnmount() {
-		document.body.removeEventListener("keydown", this.escClosePopup);
+		document.body.removeEventListener("keydown", this.handleButtonEscape);
 	}
 
 	closePopup() {
-		// for hide the NewTaskPopup we use special
-		// css-rule .hidden { display: none }, which is
-		// added to the current css-class 
-		let oldClass = this.state.className;
-		let needClass = [oldClass, "hidden"];
-		let newClass = needClass.join(" ");
-		this.setState({ className: newClass });
-		// button causing the popup
-		// after closePopup() state of button should be false
-		let button = this.props.button;
-		button.setState({ isPress: false});
+		const classes = classNames(this.state.className, "hidden");
+		this.setState({ className: classes });
+		this.props.handleChangeStateButton();
 	}
 
-	escClosePopup() { // press Escape key
+	handleButtonEscape() {
 		if (event.keyCode == 27) {
 			this.closePopup();
 		}
 	}
 
-	addTask() {// save custom input as new task
-		let appStorage = localStorage;
-
+	addTask() {
 		let obj = {
 			title: this.state.taskTitle,
 			descr: this.state.taskDescr ? this.state.taskDescr : "-",
 			comment: [],
-			author: appStorage.getItem("author"),
-			column: this.props.colTitle
+			author: localStorage.getItem("author"),
+			column: this.props.columnTitle
 		};
-		console.log(obj);
-		
-		// serialize object and upload in localStorage
 		var newTaskSerial = JSON.stringify(obj);
-		appStorage.setItem("task", newTaskSerial);
-
-		this.props.add();
+		localStorage.setItem("task", newTaskSerial);
+		this.props.addTask();
 	}
 
 	handleSetTitle(event) {
@@ -102,7 +89,7 @@ export default class NewTaskPopup extends Component {
 }
 
 NewTaskPopup.propTypes = {
-	add: PropTypes.func,
-	button: PropTypes.object,
-	colTitle: PropTypes.string,
+	addTask: PropTypes.func,
+	handleChangeStateButton: PropTypes.func,
+	columnTitle: PropTypes.string,
 };
