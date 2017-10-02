@@ -10,6 +10,7 @@ export default class Button extends Component {
 		};
 		this.handleClick = this.handleClick.bind(this);
 		this.addTask = this.addTask.bind(this);
+		this.handleChangeStateButton = this.handleChangeStateButton.bind(this);
 	}
 
 	handleClick() {
@@ -20,8 +21,12 @@ export default class Button extends Component {
 		}	
 	}
 
+	handleChangeStateButton() {
+		this.setState({ isPress: false});
+	}	
+
 	addTask() {
-		this.props.column.addTask();
+		this.props.addTask();
 	}
 
 	render() {
@@ -29,7 +34,11 @@ export default class Button extends Component {
 			<div className="column-button__add">
 				<i className="icon-doc-add" title="add task" onClick={this.handleClick} ></i>
 				{ this.state.isPress ? 
-					<NewTaskPopup add={this.addTask} button={this} colTitle={this.props.column.state.title}/> : ""
+					<NewTaskPopup 
+						addTask={this.addTask} 
+						handleChangeStateButton={this.handleChangeStateButton} 
+						columnTitle={this.props.columnTitle}
+					/> : ""
 				}					 
 			</div>
 		);	
@@ -37,5 +46,6 @@ export default class Button extends Component {
 }
 
 Button.propTypes = {
-	column: PropTypes.object,
+	columnTitle: PropTypes.string,
+	addTask: PropTypes.func
 };
