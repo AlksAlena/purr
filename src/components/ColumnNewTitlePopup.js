@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types"; 
+import classNames from "classnames";
 
 export default class ColumnNewTitlePopup  extends Component {
 	constructor(props) {
 		super(props);
 		this.closePopup = this.closePopup.bind(this);
-		this.escClosePopup = this.escClosePopup.bind(this);
+		this.handleButtonEscape = this.handleButtonEscape.bind(this);
 		this.editColumnTitle = this.editColumnTitle.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -16,28 +17,20 @@ export default class ColumnNewTitlePopup  extends Component {
 	}
 
 	componentDidMount() {
-		document.body.addEventListener("keydown", this.escClosePopup);
+		document.body.addEventListener("keydown", this.handleButtonEscape);
 	}
 
 	componentWillUnmount() {
-		document.body.removeEventListener("keydown", this.escClosePopup);
+		document.body.removeEventListener("keydown", this.handleButtonEscape);
 	}
 
 	closePopup() {
-		// for hide the NewTaskPopup we use special
-		// css-rule .hidden { display: none }, which is
-		// added to the current css-class 
-		let oldClass = this.state.className;
-		let needClass = [oldClass, "hidden"];
-		let newClass = needClass.join(" ");
-		this.setState({ className: newClass });
-		// button causing the popup
-		// after closePopup() state of button should be false
-		let parent = this.props.parent;
-		parent.setState({ isChangeTitle: false });
+		const classes = classNames(this.state.className, "hidden");
+		this.setState({ className: classes });
+		this.props.handleChangeStateButton();
 	}
 
-	escClosePopup() { // press Escape key
+	handleButtonEscape() {
 		if (event.keyCode == 27) {
 			this.closePopup();
 		}
@@ -54,14 +47,11 @@ export default class ColumnNewTitlePopup  extends Component {
 	}
 
 	editColumnTitle() {
-		let parent = this.props.parent;
-		// parent.props.title - initial title of the column 
-		// parent.state.title - current title of the column (may be changed after init)
-		// columnTitleTODO = "new value"
+		const { initColumnTitle, customColumnTitle, editColumnTitle } = this.props;
 		this.state.title ?
-			localStorage.setItem(`columnTitle${parent.props.title}`, this.state.title) :
-			localStorage.setItem(`columnTitle${parent.props.title}`, parent.state.title);
-		parent.editColumnTitle();
+			localStorage.setItem(`columnTitle${initColumnTitle}`, this.state.title) :
+			localStorage.setItem(`columnTitle${initColumnTitle}`, customColumnTitle);
+		editColumnTitle();
 	}
 
 	render() {
@@ -86,5 +76,9 @@ export default class ColumnNewTitlePopup  extends Component {
 }
 
 ColumnNewTitlePopup.propTypes = {
-	parent: PropTypes.object,
+	handleChangeStateButton: PropTypes.func,
+	editColumnTitle: PropTypes.func,
+	customColumnTitle: PropTypes.string,
+	initColumnTitle: PropTypes.string
+
 };
