@@ -5,8 +5,8 @@ export default class Comment extends Component {
 	constructor(props) {
 		super(props);
 		this.editComment = this.editComment.bind(this);
-		this.updComment = this.updComment.bind(this);
-		this.delComment = this.delComment.bind(this);
+		this.updateComment = this.updateComment.bind(this);
+		this.deleteComment = this.deleteComment.bind(this);
 		this.handleEditComment = this.handleEditComment.bind(this);
 		this.state = {
 			isEdit: false,
@@ -19,66 +19,65 @@ export default class Comment extends Component {
 	}
 
 	editComment() {
-		console.log("edit comment");
 		this.setState({ isEdit: true });
 	}
 
-	updComment() {
-		console.log("update comment");
-		localStorage.setItem("updCommentIndex", this.props.index);
+	updateComment() {
+		localStorage.setItem("updateCommentIndex", this.props.index);
 		let prevText = this.props.comment.text;
-		let updComment = {
+		let updateComment = {
 			text: this.state.textComment ? this.state.textComment : prevText,
 			author: this.props.comment.author,
 			date: this.props.comment.date
 		};
-		// serialize object and upload in localStorage
-		let serialUpdComment = JSON.stringify(updComment);
-		localStorage.setItem("updComment", serialUpdComment);
-		this.props.upd();
+		let serialUpdComment = JSON.stringify(updateComment);
+		localStorage.setItem("updateComment", serialUpdComment);
+		this.props.updateComment();
 		this.setState({ isEdit: false });
 	}
 
-	delComment() {
-		localStorage.setItem("delCommentIndex", this.props.index);
-		this.props.del();
+	deleteComment() {
+		localStorage.setItem("deleteCommentIndex", this.props.index);
+		this.props.deleteComment();
 	}
 
 	render() {
+		const { text, author, date } = this.props.comment;
 		return (
 			<div className="comment" >
 				{
 					this.state.isEdit ?
-					<input className="comment-text__edit" type="text" value={this.state.textComment} onChange={this.handleEditComment}/> :
-					<p className="comment-text">{this.props.comment.text}</p>
+					<input 
+						className="comment-text__edit" 
+						type="text" 
+						value={this.state.textComment} 
+						onChange={this.handleEditComment}
+					/> : <p className="comment-text">{text}</p>
 				}
 				<div className="comment-info">
-					<span>{this.props.comment.author} </span>
-					<span>{this.props.comment.date}</span>
+					<span>{author} </span>
+					<span>{date}</span>
 					{
 						this.state.isEdit ? 
-						<a href="#" className="comment-btn__save"onClick={this.updComment}>
+						<a href="#" className="comment-btn__save"onClick={this.updateComment}>
 							<i className="icon-floppy"></i>
 						</a> : ""
 					}
 					<a href="#" className="comment-btn__edit" onClick={this.editComment}>
 						<i className="icon-pencil"></i>
 					</a>
-					<a href="#" className="comment-btn__delete" onClick={this.delComment}>
+					<a href="#" className="comment-btn__delete" onClick={this.deleteComment}>
 						<i className="icon-trash-empty"></i>
-					</a>			
-					
-				</div>
-				
+					</a>						
+				</div>				
 			</div>
-		);
-		
+		);		
 	}
 }
 
 Comment.propTypes = {
 	comment: PropTypes.object,
 	index: PropTypes.number,
-	del: PropTypes.func,
-	upd: PropTypes.func,
+	deleteComment: PropTypes.func,
+	updateComment: PropTypes.func,
 };
