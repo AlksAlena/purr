@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types"; 
+import classNames from "classnames";
 
 export default class NewUserPopup  extends Component {
 	constructor(props) {
@@ -14,13 +15,8 @@ export default class NewUserPopup  extends Component {
 	}
 
 	closePopup() {
-		// for hide the NewTaskPopup we use special
-		// css-rule .hidden { display: none }, which is
-		// added to the current css-class 
-		let oldClass = this.state.className;
-		let needClass = [oldClass, "hidden"];
-		let newClass = needClass.join(" ");
-		this.setState({ className: newClass });
+		const classes = classNames(this.state.className, "hidden");
+		this.setState({ className: classes });
 	}
 
 	handleChange(event) {
@@ -28,10 +24,8 @@ export default class NewUserPopup  extends Component {
 	}
 
 	handleSubmit(event) {
-		// save value in local storage
 		localStorage.setItem("author", this.state.author );
-		// set state in App component
-		this.props.app.setState({ author: this.state.author });
+		this.props.setNewAuthor();
 		this.closePopup();
 		event.preventDefault();
 	}
@@ -42,12 +36,15 @@ export default class NewUserPopup  extends Component {
 				<div className="overlay"></div>
 				<div className="content">
 					<form onSubmit={this.handleSubmit} >
-						<a href="#" className="btn__close" title="close" onClick={this.closePopup}>
-							<i className="icon-cancel"></i>
-						</a>
-
 						<h2>What is your name?</h2>
-						<input type="text" name="userName" value={this.state.author} onChange={this.handleChange} autoFocus={true} required />
+						<input 
+							type="text" 
+							name="userName" 
+							value={this.state.author} 
+							onChange={this.handleChange} 
+							autoFocus={true} 
+							required 
+						/>
 						<input type="submit" value="Save" />
 					</form>
 				</div>
@@ -57,5 +54,5 @@ export default class NewUserPopup  extends Component {
 }
 
 NewUserPopup.propTypes = {
-	app: PropTypes.object,
+	setNewAuthor: PropTypes.func
 };
