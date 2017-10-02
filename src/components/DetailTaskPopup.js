@@ -1,61 +1,53 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types"; 
+import classNames from "classnames";
 import CommentList from "./CommentList";
 
 export default class DetailTaskPopup extends Component {
 	constructor(props) {
 		super(props);
 		this.closePopup = this.closePopup.bind(this);
-		this.escClosePopup = this.escClosePopup.bind(this);
-		this.handleDelTaskClick = this.handleDelTaskClick.bind(this);
+		this.handleButtonEscape = this.handleButtonEscape.bind(this);
+		this.handleDeleteTaskClick = this.handleDeleteTaskClick.bind(this);
 		this.handleChangeTitle = this.handleChangeTitle.bind(this);
 		this.handleChangeDescr = this.handleChangeDescr.bind(this);
 		this.handleChangeComment = this.handleChangeComment.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.onFocus = this.onFocus.bind(this);
 		this.addComment = this.addComment.bind(this);
-		this.updComment = this.updComment.bind(this);
-		this.delComment = this.delComment.bind(this);
+		this.updateComment = this.updateComment.bind(this);
+		this.deleteComment = this.deleteComment.bind(this);
 		this.state = {
 			className: "detailTaskPopup",
 			taskTitle: "",
 			taskDescr: "",
 			taskComment: "",
-			isEdited: false, // any changes in the task
-			commentList: this.props.task.comment // array of the comments in the task
+			isEdited: false,
+			commentList: this.props.task.comment
 		};
 	}
 
 	componentDidMount() {
-		document.body.addEventListener("keydown", this.escClosePopup);
+		document.body.addEventListener("keydown", this.handleButtonEscape);
 	}
 
 	componentWillUnmount() {
-		document.body.removeEventListener("keydown", this.escClosePopup);
+		document.body.removeEventListener("keydown", this.handleButtonEscape);
 	}
 
 	closePopup() {
-		// for hide the NewTaskPopup we use special
-		// css-rule .hidden { display: none }, which is
-		// added to the current css-class 
-		let oldClass = this.state.className;
-		let needClass = [oldClass, "hidden"];
-		let newClass = needClass.join(" ");
-		this.setState({ className: newClass });
-		// button causing the popup
-		// after closePopup() state of button should be false
-		let parent = this.props.parent;
-		parent.setState({ isDetail: false});
+		const classes = classNames(this.state.className, "hidden");
+		this.setState({ className: classes });
+		this.props.handleChangeStateButton();
 	}
 
-	escClosePopup() { // press Escape key
+	handleButtonEscape() {
 		if (event.keyCode == 27) {
 			this.closePopup();
 		}
 	}
 
 	handleChangeTitle(event) {
-		// reaction on enter text
 		this.setState({taskTitle: event.target.value});
 		this.props.task.title = event.target.value;
 	}
@@ -70,13 +62,10 @@ export default class DetailTaskPopup extends Component {
 	}
 
 	addComment() {
-		// if new comment not empty
 		if(this.state.taskComment) {
-			console.log("ok");
 			let today = new Date();
 			let now = today.getDate() + "-" + (today.getMonth() + 1) + 
 				"-" + today.getFullYear() + " " + today.getHours() + ":" + today.getMinutes();
-			console.log("now: " + now);
 			let comment = {
 				text: this.state.taskComment,
 				author: localStorage.getItem("author"), //not author of the task
@@ -87,39 +76,31 @@ export default class DetailTaskPopup extends Component {
 			this.setState({ commentList: newCommentList });
 			this.setState({ taskComment: "" });
 			this.setState({ isEdited: true });
-		} else console.log("empty comment");
+		}
 	}
 
-	updComment() {
-		let updIndex = localStorage.getItem("updCommentIndex");
-		console.log("updCommentIndex: " + updIndex);
+	updateComment() {
+		let updateIndex = localStorage.getItem("updateCommentIndex");
 		let tmpCommentList = this.state.commentList;
-		// get Obj from LS - parse comment in object
-		let newComment = JSON.parse(localStorage.getItem("updComment"));
-		tmpCommentList.splice(updIndex, 1, newComment);
-		// set new state - rerender and remove used updIndex
+		let newComment = JSON.parse(localStorage.getItem("updateComment"));
+		tmpCommentList.splice(updateIndex, 1, newComment);
 		this.setState({ commentList: tmpCommentList });
-		// remove used updIdex from LS
-		localStorage.removeItem("updCommentIndex");
-		localStorage.removeItem("updComment");
+		localStorage.removeItem("updateCommentIndex");
+		localStorage.removeItem("updateComment");
 		this.setState({ isEdited: true });
 	}
 
-	delComment() {
-		let delIndex = localStorage.getItem("delCommentIndex");
-		console.log("delCommentIndex: " + delIndex);
+	deleteComment() {
+		let deleteIndex = localStorage.getItem("deleteCommentIndex");
 		let tmpCommentList = this.state.commentList;
-		tmpCommentList.splice(delIndex, 1);
-		// set new state - rerender and remove used updIndex
+		tmpCommentList.splice(deleteIndex, 1);
 		this.setState({ commentList: tmpCommentList });
-		// remove used updIdex from LS
-		localStorage.removeItem("delCommentIndex");
+		localStorage.removeItem("deleteCommentIndex");
 		this.setState({ isEdited: true });
 	}
 
-	// delete current task and close popup
-	handleDelTaskClick() {
-		this.props.parent.delete();
+	handleDeleteTaskClick() {
+		this.props.deleteTask();
 		this.closePopup();
 	}
 
@@ -129,21 +110,19 @@ export default class DetailTaskPopup extends Component {
 
 	handleSubmit(event) {
 		if(this.state.isEdited) {
-			console.log("the object has been changed");
-			// save changes in the new object
+			const { title, descr, author, column } = this.props.task;
+
 			let obj = {
-				title: this.props.task.title,
-				descr: this.props.task.descr,
+				title: title,
+				descr: descr,
 				comment: this.state.commentList,
-				author: this.props.task.author,
-				column: this.props.task.column
+				author: author,
+				column: column
 			};
-			// serialize object and upload in localStorage
 			var updTaskSerial = JSON.stringify(obj);
-			localStorage.setItem("updTask", updTaskSerial);
-			this.props.parent.update(); 
+			localStorage.setItem("updateTask", updTaskSerial);
+			this.props.updateTask(); 
 		}
-		// this.closePopup();
 		event.preventDefault();
 	}
 
@@ -189,7 +168,11 @@ export default class DetailTaskPopup extends Component {
 						placeholder="Add a new comment...">
 					</textarea>
 					<button className="comment-btn__add" onClick={this.addComment}>Add comment</button>
-					<CommentList comments={this.state.commentList} del={this.delComment} upd={this.updComment}/>
+					<CommentList 
+						comments={this.state.commentList} 
+						deleteComment={this.deleteComment} 
+						updateComment={this.updateComment}
+					/>
 						
 					<div className="content-info">
 						<span>Author: </span>{this.props.task.author}
@@ -203,12 +186,12 @@ export default class DetailTaskPopup extends Component {
 							<a href="#" className="btn__save" title="save" onClick={this.handleSubmit}>
 								<i className="icon-floppy"></i>
 							</a>
-							<a href="#" className="btn__delete" title="delete" onClick={this.handleDelTaskClick}>
+							<a href="#" className="btn__delete" title="delete" onClick={this.handleDeleteTaskClick}>
 								<i className="icon-trash-empty"></i>
 							</a>
 						</div> : 
 						<div>
-							<a href="#" className="btn__delete" title="delete" onClick={this.handleDelTaskClick}>
+							<a href="#" className="btn__delete" title="delete" onClick={this.handleDeleteTaskClick}>
 								<i className="icon-trash-empty"></i>
 							</a>
 						</div>
@@ -221,6 +204,8 @@ export default class DetailTaskPopup extends Component {
 
 DetailTaskPopup.propTypes = {
 	task: PropTypes.object,
-	parent: PropTypes.object,
+	handleChangeStateButton: PropTypes.func,
 	currentColumnTitle: PropTypes.string,
+	deleteTask: PropTypes.func,
+	updateTask: PropTypes.func
 };
