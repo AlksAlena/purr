@@ -5,19 +5,20 @@ import NewUserPopup from "./components/NewUserPopup";
 export default class App extends Component {
 	constructor(props) {
 		super(props);
-		this.downloadAuthor = this.downloadAuthor.bind(this);
+		this.setNewAuthor = this.setNewAuthor.bind(this);
 		this.state = {
 			author: ""
 		};
 	}
 
-	downloadAuthor() {
-		let authorLS = localStorage.getItem("author");
-		(authorLS ? this.setState({ author: authorLS }): "");		
+	setNewAuthor() {
+		let newAuthor = localStorage.getItem("author");
+		this.setState({ author: newAuthor });
 	}
 
-	componentWillMount() {
-		this.downloadAuthor();
+	componentDidMount() {
+		let authorLS = localStorage.getItem("author");
+		(authorLS ? this.setState({ author: authorLS }): "");	
 	}
 
 	render() {		
@@ -30,7 +31,7 @@ export default class App extends Component {
 					</h1>
 				}
 				<Desk />
-				{ this.state.author ? "" : <NewUserPopup app={this} /> }
+				{ this.state.author ? "" : <NewUserPopup setNewAuthor={this.setNewAuthor} /> }
 			</div>
 		);
 	}
