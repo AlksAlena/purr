@@ -1,38 +1,51 @@
 import React, { Component } from "react";
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import rootReducers from "./reducers";
+
 import Desk from "./components/Desk";
 import NewUserPopup from "./components/NewUserPopup";
+// ----------------------------
+const store = createStore(rootReducers);
+window.store = store;
+
+store.subscribe(() => {
+	let tmpDeskState = store.getState();
+	let tmpDeskStateSerial = JSON.stringify(tmpDeskState);
+	localStorage.setItem("deskState", tmpDeskStateSerial);
+}); 
+
+// ----------------------------
 
 export default class App extends Component {
 	constructor(props) {
 		super(props);
-		this.setNewAuthor = this.setNewAuthor.bind(this);
 		this.state = {
-			author: ""
+			author: store.getState().columnsReducer.author
 		};
 	}
 
-	setNewAuthor() {
-		let newAuthor = localStorage.getItem("author");
-		this.setState({ author: newAuthor });
-	}
-
 	componentDidMount() {
-		let authorLS = localStorage.getItem("author");
-		(authorLS ? this.setState({ author: authorLS }): "");	
+		store.subscribe(() => {
+			let tmpAuthor = store.getState().columnsReducer.author;
+			this.setState({ author: tmpAuthor });
+		}); 
 	}
 
-	render() {		
-		return (
-			<div className="container app">
-				{ this.state.author ? 
-					<h1 className="app-title">Hi, {this.state.author}</h1> : 
+	render() {
+		return(		
+			<Provider store={store}>	
+				<div className="container app">
+					{ this.state.author ? 
+					<h1 className="app-title">Hi, { this.state.author }!</h1> : 
 					<h1 className="app-title">Frello - powerful app for managing your tasks
 						<small>Get's started it's FREE!</small>
-					</h1>
-				}
-				<Desk />
-				{ this.state.author ? "" : <NewUserPopup setNewAuthor={this.setNewAuthor} /> }
-			</div>
+					</h1> }
+					
+					<Desk />	
+					{ this.state.author ? "" : <NewUserPopup />  }
+				</div>	
+			</Provider>		
 		);
 	}
 }
