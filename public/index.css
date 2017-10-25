@@ -80,6 +80,8 @@ body {
 }
 .column-button__add {
 	padding: 5px 0;
+	border: none;
+    background-color: transparent;
 }
 .overlay {
 	position: fixed;
@@ -103,7 +105,7 @@ body {
 .content textarea {
 	resize: none;
 }
-.columnNewTitle .content,
+.newTitleColumnPopup .content,
 .newTaskPopup .content,
 .newUserPopup .content {
 	top: calc(15%);
@@ -231,7 +233,4 @@ body {
 .content input[type="submit"]:hover {
 	background-color: #337ab7;
 	color: #fff;
-}
-.hidden {
-	display: none;
 }
