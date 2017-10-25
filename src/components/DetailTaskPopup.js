@@ -1,29 +1,17 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types"; 
-import classNames from "classnames";
-import CommentList from "./CommentList";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { editTask, changeTitleTask, changeDescriptionTask, deleteTask, addComment, closePopup } from "../actions";
 
-export default class DetailTaskPopup extends Component {
+import CommentsList from "./CommentsList";
+
+class DetailTaskPopup extends Component {
 	constructor(props) {
 		super(props);
-		this.closePopup = this.closePopup.bind(this);
 		this.handleButtonEscape = this.handleButtonEscape.bind(this);
-		this.handleDeleteTaskClick = this.handleDeleteTaskClick.bind(this);
-		this.handleChangeTitle = this.handleChangeTitle.bind(this);
-		this.handleChangeDescr = this.handleChangeDescr.bind(this);
-		this.handleChangeComment = this.handleChangeComment.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-		this.onFocus = this.onFocus.bind(this);
-		this.addComment = this.addComment.bind(this);
-		this.updateComment = this.updateComment.bind(this);
-		this.deleteComment = this.deleteComment.bind(this);
 		this.state = {
-			className: "detailTaskPopup",
-			taskTitle: "",
-			taskDescr: "",
 			taskComment: "",
-			isEdited: false,
-			commentList: this.props.task.comment
+			isEdited: false
 		};
 	}
 
@@ -35,177 +23,152 @@ export default class DetailTaskPopup extends Component {
 		document.body.removeEventListener("keydown", this.handleButtonEscape);
 	}
 
-	closePopup() {
-		const classes = classNames(this.state.className, "hidden");
-		this.setState({ className: classes });
-		this.props.handleChangeStateButton();
+	handleClosePopup() {
+		this.props.closePopup(this.props.id);
 	}
 
 	handleButtonEscape() {
 		if (event.keyCode == 27) {
-			this.closePopup();
+			this.props.closePopup(this.props.id);
 		}
 	}
 
 	handleChangeTitle(event) {
-		this.setState({taskTitle: event.target.value});
-		this.props.task.title = event.target.value;
+		this.props.changeTitleTask(event.target.value);
+		this.handleIsEdited();
 	}
 
-	handleChangeDescr(event) {
-		this.setState({taskDescr: event.target.value});
-		this.props.task.descr = event.target.value;
+	handleChangeDescription(event) {
+		this.props.changeDescriptionTask(event.target.value);
+		this.handleIsEdited();
+	}
+
+	handleDeleteButton() {
+		this.props.deleteTask(this.props.popups.detailPopup.task.columnId, this.props.popups.detailPopup.task.indexTask); 
+		this.props.closePopup(this.props.id);
 	}
 
 	handleChangeComment(event) {
-		this.setState({taskComment: event.target.value});
+		this.setState({ taskComment: event.target.value });
 	}
 
-	addComment() {
+	handleAddCommentButton() {
 		if(this.state.taskComment) {
-			let today = new Date();
-			let now = today.getDate() + "-" + (today.getMonth() + 1) + 
-				"-" + today.getFullYear() + " " + today.getHours() + ":" + today.getMinutes();
-			let comment = {
-				text: this.state.taskComment,
-				author: localStorage.getItem("author"), //not author of the task
-				date: now
-			};
-			let newCommentList = this.state.commentList;
-			newCommentList.unshift(comment);
-			this.setState({ commentList: newCommentList });
-			this.setState({ taskComment: "" });
-			this.setState({ isEdited: true });
-		}
+			this.props.addComment(this.state.taskComment);
+			this.handleIsEdited();
+		};
+		this.setState({ taskComment: '' });
+		
 	}
 
-	updateComment() {
-		let updateIndex = localStorage.getItem("updateCommentIndex");
-		let tmpCommentList = this.state.commentList;
-		let newComment = JSON.parse(localStorage.getItem("updateComment"));
-		tmpCommentList.splice(updateIndex, 1, newComment);
-		this.setState({ commentList: tmpCommentList });
-		localStorage.removeItem("updateCommentIndex");
-		localStorage.removeItem("updateComment");
+	handleIsEdited() {
 		this.setState({ isEdited: true });
 	}
 
-	deleteComment() {
-		let deleteIndex = localStorage.getItem("deleteCommentIndex");
-		let tmpCommentList = this.state.commentList;
-		tmpCommentList.splice(deleteIndex, 1);
-		this.setState({ commentList: tmpCommentList });
-		localStorage.removeItem("deleteCommentIndex");
-		this.setState({ isEdited: true });
-	}
-
-	handleDeleteTaskClick() {
-		this.props.deleteTask();
-		this.closePopup();
-	}
-
-	onFocus() {
-		this.setState({ isEdited: true });
-	}
-
-	handleSubmit(event) {
-		if(this.state.isEdited) {
-			const { title, descr, author, column } = this.props.task;
-
-			let obj = {
-				title: title,
-				descr: descr,
-				comment: this.state.commentList,
-				author: author,
-				column: column
-			};
-			var updTaskSerial = JSON.stringify(obj);
-			localStorage.setItem("updateTask", updTaskSerial);
-			this.props.updateTask(); 
-		}
-		event.preventDefault();
+	handleSaveButton() {
+		if(this.props.popups.detailPopup.task.title)  {
+			this.props.editTask(
+				this.props.popups.detailPopup.task.columnId, 
+				this.props.popups.detailPopup.task.indexTask, 
+				this.props.popups.detailPopup.task.title, 
+				this.props.popups.detailPopup.task.description,
+				this.props.popups.detailPopup.task.comments
+			); 
+		} else console.log("задача не будет сохранена!")
 	}
 
 	render() {
 		return (
-			<div className={this.state.className} >
+			<div className="DetailTaskPopup">
 				<div className="overlay"></div>
-				<div className="content">				
-					<a href="#" className="btn__close" title="close" onClick={this.closePopup}>
+				<div className="content">
+					<a href="#" className="btn__close" title="close" onClick={this.handleClosePopup.bind(this)}>
 						<i className="icon-cancel"></i>
 					</a>
 
 					<h2>
 						<input className="content-text" 
 							type="text" 
-							value={this.props.task.title} 
-							onChange={this.handleChangeTitle} 
-							onFocus={this.onFocus} 
+							placeholder="title is required !" 
+							value={ this.props.popups.detailPopup.task.title } 
+							onChange={this.handleChangeTitle.bind(this)}
 						/>
 					</h2>
 
 					<label>Description:</label>
-					{ this.props.task.descr.length > 42 ?
+					{ this.props.popups.detailPopup.task.description.length > 42 ?
 						<textarea className="content-text" 
 							rows="4" 
-							value={this.props.task.descr} 
-							onChange={this.handleChangeDescr} 
-							onFocus={this.onFocus} >
-						</textarea> :
+							value={ this.props.popups.detailPopup.task.description } 
+							onChange={this.handleChangeDescription.bind(this)}
+						></textarea> :
 						<textarea className="content-text" 
-							rows="1" 
-							value={this.props.task.descr} 
-							onChange={this.handleChangeDescr} 
-							onFocus={this.onFocus} >
-						</textarea>
+							rows="2" 
+							value={ this.props.popups.detailPopup.task.description } 
+							onChange={this.handleChangeDescription.bind(this)}
+						></textarea>
 					}
 
 					<label>Comments:</label>
 					<textarea rows="2" 
 						className="content-comment" 
 						value={this.state.taskComment} 
-						onChange={this.handleChangeComment} 
+						onChange={this.handleChangeComment.bind(this)} 
 						placeholder="Add a new comment...">
-					</textarea>
-					<button className="comment-btn__add" onClick={this.addComment}>Add comment</button>
-					<CommentList 
-						comments={this.state.commentList} 
-						deleteComment={this.deleteComment} 
-						updateComment={this.updateComment}
+					></textarea>
+					<button className="comment-btn__add" onClick={this.handleAddCommentButton.bind(this)}>Add comment</button>
+					
+					<CommentsList 
+						comments={ this.props.popups.detailPopup.task.comments } 
+						handleIsEdited={this.handleIsEdited.bind(this)} 
+						handleSaveButton={this.handleSaveButton.bind(this)}
 					/>
-						
+
 					<div className="content-info">
-						<span>Author: </span>{this.props.task.author}
+						<span>Author: </span>{this.props.popups.detailPopup.task.author}
 					</div>
 					<div className="content-info">
-						<span>Column: </span>{this.props.currentColumnTitle}
+						<span>Column: </span>{this.props.popups.detailPopup.task.columnTitle}
 					</div>
 
 					{this.state.isEdited ? 
 						<div>
-							<a href="#" className="btn__save" title="save" onClick={this.handleSubmit}>
+							<a href="#" className="btn__save" title="save" onClick={this.handleSaveButton.bind(this)}>
 								<i className="icon-floppy"></i>
 							</a>
-							<a href="#" className="btn__delete" title="delete" onClick={this.handleDeleteTaskClick}>
+							<a href="#" className="btn__delete" title="delete" onClick={this.handleDeleteButton.bind(this)} >
 								<i className="icon-trash-empty"></i>
 							</a>
 						</div> : 
 						<div>
-							<a href="#" className="btn__delete" title="delete" onClick={this.handleDeleteTaskClick}>
+							<a href="#" className="btn__delete" title="delete" onClick={this.handleDeleteButton.bind(this)} >
 								<i className="icon-trash-empty"></i>
 							</a>
 						</div>
 					}	
+					
 				</div>
 			</div>
 		);
 	}
 }
 
-DetailTaskPopup.propTypes = {
-	task: PropTypes.object,
-	handleChangeStateButton: PropTypes.func,
-	currentColumnTitle: PropTypes.string,
-	deleteTask: PropTypes.func,
-	updateTask: PropTypes.func
-};
+const mapStateToProps = (state) => {
+	return {
+		popups: state.popupsReducer,
+		columns: state.columnsReducer,
+		id: 'detail'
+	}
+}
+const mapDispatchToProps = (dispatch) => {
+	return {
+		changeTitleTask: bindActionCreators(changeTitleTask, dispatch),
+		changeDescriptionTask: bindActionCreators(changeDescriptionTask, dispatch),
+		editTask: bindActionCreators(editTask, dispatch),
+		deleteTask: bindActionCreators(deleteTask, dispatch),
+		addComment: bindActionCreators(addComment, dispatch),
+		closePopup: bindActionCreators(closePopup, dispatch)
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DetailTaskPopup)

@@ -1,18 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addNewTask, closePopup } from "../actions";
+import { setNewTitleColumn, closePopup } from "../actions";
 
-class NewTaskPopup extends Component {
+class NewTitleColumnPopup extends Component {
 	constructor(props) {
 		super(props);
 		this.handleButtonEscape = this.handleButtonEscape.bind(this);
-		this.handleSetTitle = this.handleSetTitle.bind(this);
-		this.handleSetDescription = this.handleSetDescription.bind(this);
 		this.handleClosePopup = this.handleClosePopup.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 		this.state = {
-			taskTitle: "",
-			taskDescription: ""
+			title: ""
 		};
 	}
 
@@ -34,50 +32,37 @@ class NewTaskPopup extends Component {
 		}
 	}
 
-	handleSetTitle(event) {
-		this.setState({taskTitle: event.target.value});
-	}
-
-	handleSetDescription(event) {
-		this.setState({taskDescription: event.target.value});
+	handleSetNewTitle(event) {
+		this.setState({title: event.target.value});
 	}
 
 	handleSubmit(event) {
 		event.preventDefault();
-		this.props.addNewTask(this.props.popups.newTaskPopup.column, this.state.taskTitle, this.state.taskDescription);
+		this.props.setNewTitleColumn(this.props.popups.newTitleColumnPopup.column, this.props.popups.newTitleColumnPopup.prevTitle, this.state.title);
 		this.setState({
-			taskTitle: "",
-			taskDescription: ""
+			title: ""
 		});
 		this.props.closePopup(this.props.id);
 	}
 
 	render() {
 		return (
-			<div className="newTaskPopup">
+			<div className="newTitleColumnPopup">
 				<div className="overlay"></div>
 				<div className="content">
-					<form onSubmit={this.handleSubmit.bind(this)}>
+					<form onSubmit={this.handleSubmit} >
 						<a href="#" className="btn__close" title="close" onClick={this.handleClosePopup}>
 							<i className="icon-cancel"></i>
 						</a>
 
-						<h2>Create a new task</h2>
-						<label>Enter title of task</label>
+						<h2>Edit title</h2>
+						<label>Enter new title of the task</label>
 						<input 
 							type="text" 
-							value={this.state.taskTitle} 
-							onChange={this.handleSetTitle} 
+							value={this.state.title} 
+							onChange={this.handleSetNewTitle.bind(this)} 
 							autoFocus={true} 
-							required 
 						/>
-						
-						<label>Enter description</label>
-						<textarea 
-							rows="3" 
-							value={this.state.taskDescription} 
-							onChange={this.handleSetDescription}
-						></textarea>
 						<input type="submit" value="Save" />
 					</form>
 				</div>
@@ -89,14 +74,14 @@ class NewTaskPopup extends Component {
 const mapStateToProps = (state) => {
 	return {
 		popups: state.popupsReducer,
-		id: 'newTask'
+		id: 'newTitleColumn'
 	}
 }
 const mapDispatchToProps = (dispatch) => {
 	return {
-		addNewTask: bindActionCreators(addNewTask, dispatch),
+		setNewTitleColumn: bindActionCreators(setNewTitleColumn, dispatch),
 		closePopup: bindActionCreators(closePopup, dispatch)
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewTaskPopup)
+export default connect(mapStateToProps, mapDispatchToProps)(NewTitleColumnPopup)
