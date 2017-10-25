@@ -1,6 +1,6 @@
 # Purr-project
 
-Training analogue Trello.com on React without Redux.
+Training analogue Trello.com on React with Redux.
 
 ![screenshot of the app](purrproject.JPG "Common view")
 
