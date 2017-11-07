@@ -152,6 +152,11 @@ const ACTION_HANDLERS = {
     })
   },
   [EDIT_COMMENT]: (state, action) => {
+    const updateComment = {
+      text: action.text,
+      author: state.detailPopup.task.author,
+      date: state.detailPopup.task.date
+    };
     state.detailPopup.task.comments.splice(action.indexComment, 1, updateComment);
     return ({
       ...state,
