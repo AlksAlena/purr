@@ -7,7 +7,7 @@
     "start": "webpack --config webpack.config.js",
     "server": "webpack-dev-server --content-base ./public --inline --hot"
   },
-  "author": "Alyona",
+  "author": "Alyona Aleksina",
   "license": "ISC",
   "devDependencies": {
     "autoprefixer-loader": "^3.2.0",
